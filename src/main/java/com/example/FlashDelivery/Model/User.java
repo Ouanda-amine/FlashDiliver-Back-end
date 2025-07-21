@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,8 @@ public class User {
     private String prenom;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
 }
