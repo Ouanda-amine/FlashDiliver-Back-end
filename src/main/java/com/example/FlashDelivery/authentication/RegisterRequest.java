@@ -1,16 +1,19 @@
 package com.example.FlashDelivery.authentication;
 
+import com.example.FlashDelivery.Model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequest {
-
+@Builder
+public class RegisterRequest {
+    private String firstName;
+    private String lastName;
     private String email;
-    String password;
+    private String password;
+    private Role role;
 }
