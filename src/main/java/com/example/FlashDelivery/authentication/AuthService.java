@@ -1,5 +1,7 @@
 package com.example.FlashDelivery.authentication;
 
+import com.example.FlashDelivery.Model.Client;
+import com.example.FlashDelivery.Model.Livreur;
 import com.example.FlashDelivery.Model.User;
 import com.example.FlashDelivery.Repository.UserRipository;
 import com.example.FlashDelivery.Securité.JwtService;
@@ -25,17 +27,32 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
 
-        var user = new User(
-                null, request.getFirstName(), request.getLastName(),
-                request.getEmail(), passwordEncoder.encode(request.getPassword())
-                ,request.getRole()
-        );
+        if (request.getIsLiv()){
+            Livreur livreur = new Livreur(
+                    null,request.getFirstName(),request.getLastName(),
+                    request.getEmail(),passwordEncoder.encode(request.getPassword())
+            );
+            repository.save(livreur);
+            var jwtToken = jwtService.generateToken(livreur);
+            return AuthResponse.builder()
+                    .accessToken(jwtToken)
+                    .build();
 
-        repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
-                .accessToken(jwtToken)
-                .build();
+        }else{
+            Client client = new Client(
+                    null,request.getFirstName(),request.getLastName(),
+                    request.getEmail(),passwordEncoder.encode(request.getPassword())
+
+            );
+            repository.save(client);
+            var jwtToken = jwtService.generateToken(client);
+            return AuthResponse.builder()
+                    .accessToken(jwtToken)
+                    .build();
+        }
+
+
+
     }
 
     public AuthResponse authenticate(AuthRequest request) {
