@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class ClientController {
     public ClientService clientService;
 
@@ -39,7 +40,13 @@ public class ClientController {
         clientService.DeleteClient(id);
     }
 
-    
+
+    @GetMapping("/name")
+    public String getname(){
+        return clientService.getnomofuser();
+    }
+
+
 
 
 }

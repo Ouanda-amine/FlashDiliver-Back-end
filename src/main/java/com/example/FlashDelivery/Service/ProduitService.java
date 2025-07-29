@@ -16,6 +16,7 @@ public class ProduitService {
     private final ProductRepo productRepo;
 
     public ProduitDto AddProduct(ProduitDto produitDto){
+        System.out.println(produitDto.getNom());
         return produitMapper.ToProduitDto(productRepo.save(produitMapper.ToProduitEntity(produitDto)));
 
     }
@@ -28,7 +29,7 @@ public class ProduitService {
 
     public ProduitDto UpdateProduct(ProduitDto produitDto , Long id){
         Produit produit = productRepo.findById(id).get();
-        produit.setNomProduit(produitDto.getNom());
+        produit.setNom(produitDto.getNom());
         produit.setPrix(produitDto.getPrix());
 
         return produitMapper.ToProduitDto(productRepo.save(produit));

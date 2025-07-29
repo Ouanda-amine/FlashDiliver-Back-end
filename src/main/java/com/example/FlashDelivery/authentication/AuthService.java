@@ -10,6 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthService {
 
@@ -33,7 +36,8 @@ public class AuthService {
                     request.getEmail(),passwordEncoder.encode(request.getPassword())
             );
             repository.save(livreur);
-            var jwtToken = jwtService.generateToken(livreur);
+            Map<String, String> map = get(livreur);
+            var jwtToken = jwtService.generateToken(map, livreur);
             return AuthResponse.builder()
                     .accessToken(jwtToken)
                     .build();
@@ -45,7 +49,8 @@ public class AuthService {
 
             );
             repository.save(client);
-            var jwtToken = jwtService.generateToken(client);
+            Map<String, String> map = get(client);
+            var jwtToken = jwtService.generateToken(map,client);
             return AuthResponse.builder()
                     .accessToken(jwtToken)
                     .build();
@@ -64,13 +69,22 @@ public class AuthService {
         );
         User user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+
+        Map<String, String> map = get(user);
+        var jwtToken = jwtService.generateToken(map, user);
 
         return AuthResponse.builder()
                 .accessToken(jwtToken)
                 .build();
 
     }
+
+    private static Map<String, String> get(User user) {
+        Map<String, String> map = new HashMap<>();
+        map.put("name", user.getNom());
+        return map;
+    }
+
 
 
 

@@ -6,21 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Entity
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
-public class Produit {
+@Entity
+public class  CommandeProduit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String nom;
-    private Double prix;
-    @OneToMany
-    private List<CommandeProduit> listcommandeProduit;
+
+    @ManyToOne
+    private Commande commande;
+
+    @ManyToOne
+    private  Produit produit;
+
 
 
 }

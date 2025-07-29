@@ -23,8 +23,8 @@ public class Commande {
     @ManyToOne
     private Livreur livreur;
 
-    @ManyToMany
-    private List<Produit> produits;
+    @OneToMany
+    private List<CommandeProduit> listcommandeProduit;
 
     public Commande(Long id, Client client, Livreur livreur) {
         this.id = id;

@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class CommandeController {
     public CommandeService commandeService;
 
@@ -32,6 +33,14 @@ public class CommandeController {
     public void DeleteCommande(@PathVariable Long id){
        commandeService.DeleteCommande(id);
     }
+
+    @GetMapping("/commandesOfClient")
+    public List<CommandeDto> getCommandesByemail(){
+       return commandeService.getCommandeByUseremail();
+    }
+
+
+
 
 
 }

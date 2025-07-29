@@ -4,7 +4,10 @@ import com.example.FlashDelivery.Dto.ClientDto;
 import com.example.FlashDelivery.Mapper.ClientMapper;
 import com.example.FlashDelivery.Model.Client;
 import com.example.FlashDelivery.Repository.ClientRepo;
+import com.example.FlashDelivery.Repository.UserRipository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,7 @@ public class ClientService {
 
     private final ClientMapper clientMapper;
     private final ClientRepo clientRepo;
+    private final UserRipository userRipository;
 
     public ClientDto AddClient(ClientDto clientDto){
         return clientMapper.toClientDto(clientRepo.save(clientMapper.toCliententity(clientDto)));
@@ -45,6 +49,16 @@ public class ClientService {
 
     public void DeleteClient(Long id){
         clientRepo.deleteById(id);
+    }
+
+    public String getnomofuser(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String email = userDetails.getUsername();
+
+        return userRipository.getnom(email);
+
+
     }
 
 

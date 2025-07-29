@@ -3,10 +3,12 @@ package com.example.FlashDelivery.Service;
 import com.example.FlashDelivery.Dto.CommandeDto;
 import com.example.FlashDelivery.Mapper.CommandeMapper;
 import com.example.FlashDelivery.Model.Commande;
-import com.example.FlashDelivery.Repository.ClientRepo;
-import com.example.FlashDelivery.Repository.CommandeRepo;
-import com.example.FlashDelivery.Repository.LivreurRepo;
+import com.example.FlashDelivery.Model.CommandeProduit;
+import com.example.FlashDelivery.Model.Produit;
+import com.example.FlashDelivery.Repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +21,18 @@ public class CommandeService {
     private final CommandeRepo commandeRepo;
     private final ClientRepo clientRepo;
     private final LivreurRepo livreurRepo;
+    private final ProductRepo productRepo;
+    private final ComProRepository comProRepository;
 
     public CommandeDto CreateCommande(CommandeDto commandeDto){
         var client = clientRepo.findById(commandeDto.getIdClient()).orElse(null);
         var livreur = livreurRepo.findById(commandeDto.getIdLivreur()).orElse(null);
 
         var res = commandeRepo.save(new Commande(null , client,livreur));
+
+        for (Long id : commandeDto.getProductsList()){
+            commanderProduit(res.getId(), id);
+        }
 
         return commandeMapper.ToCommandeDTO(res);
 
@@ -44,6 +52,31 @@ public class CommandeService {
     public void DeleteCommande(Long id){
         commandeRepo.deleteById(id);
     }
+
+    public List<CommandeDto> getCommandeByUseremail(){
+        UserDetails userDetails1 = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails1.getUsername();
+
+        return commandeRepo.findCommandeByClient_Email(email).stream()
+                .map(commandeMapper::ToCommandeDTO)
+                .toList();
+
+    }
+
+    public void commanderProduit(Long commandeId , Long productId){
+        Commande commande = commandeRepo.findById(commandeId).orElse(null);
+
+        Produit produit = productRepo.findById(productId).orElse(null);
+
+        CommandeProduit commandeProduit = new CommandeProduit();
+        commandeProduit.setProduit(produit);
+        commandeProduit.setCommande(commande);
+
+
+        comProRepository.save(commandeProduit);
+    }
+
+
 
 
 }
