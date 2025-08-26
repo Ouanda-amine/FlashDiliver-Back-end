@@ -82,6 +82,8 @@ public class AuthService {
     private static Map<String, String> get(User user) {
         Map<String, String> map = new HashMap<>();
         map.put("name", user.getNom());
+        map.put("role", user.getRole().name());
+        map.put("id",user.getId().toString());
         return map;
     }
 

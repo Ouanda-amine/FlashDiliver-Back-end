@@ -26,9 +26,19 @@ public class Commande {
     @OneToMany
     private List<CommandeProduit> listcommandeProduit;
 
-    public Commande(Long id, Client client, Livreur livreur) {
+    private String adresse ;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+
+
+
+    public Commande(Long id, Client client, Livreur livreur , String adresse , Status status) {
         this.id = id;
         this.client = client;
         this.livreur = livreur;
+        this.adresse = adresse;
+        this.status = Status.EN_ATTENTE;
     }
 }

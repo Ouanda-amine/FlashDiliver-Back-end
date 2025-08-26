@@ -9,4 +9,10 @@ import java.util.List;
 public interface CommandeRepo extends JpaRepository<Commande , Long> {
 
     List<Commande> findCommandeByClient_Email(String clientEmail);
+
+    List<Commande> findCommandeByLivreur_Email(String livreurEmail);
+
+    Integer countCommandeByLivreurEmail(String email);
+
+    String findCommandeByStatus(String statu);
 }

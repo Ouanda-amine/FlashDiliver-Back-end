@@ -39,6 +39,15 @@ public class CommandeController {
        return commandeService.getCommandeByUseremail();
     }
 
+    @GetMapping("/commandesOfLivreur")
+    public List<CommandeDto> getCommandesBylivreur(){
+        return commandeService.getCommandeLivreuremail();
+    }
+
+    @GetMapping("/nbrCommande")
+    public Integer getNombreDeCommande(){
+       return commandeService.nbrcommandedelivreur();
+    }
 
 
 
