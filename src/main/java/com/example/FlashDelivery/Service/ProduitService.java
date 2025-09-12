@@ -1,6 +1,7 @@
 package com.example.FlashDelivery.Service;
 
 import com.example.FlashDelivery.Dto.ProduitDto;
+import com.example.FlashDelivery.Dto.Returntype;
 import com.example.FlashDelivery.Mapper.ProduitMapper;
 import com.example.FlashDelivery.Model.Produit;
 import com.example.FlashDelivery.Repository.ProductRepo;
@@ -43,4 +44,6 @@ public class ProduitService {
     public void DeleteProduct(Long id){
         productRepo.deleteById(id);
     }
+
+
 }

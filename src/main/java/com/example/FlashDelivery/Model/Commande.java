@@ -28,13 +28,16 @@ public class Commande {
 
     private String adresse ;
 
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private double prix;
 
 
 
-    public Commande(Long id, Client client, Livreur livreur , String adresse , Status status) {
+
+    public Commande(Long id, Client client, Livreur livreur , String adresse ) {
         this.id = id;
         this.client = client;
         this.livreur = livreur;

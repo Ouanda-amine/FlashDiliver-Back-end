@@ -1,6 +1,7 @@
 package com.example.FlashDelivery.Service;
 
 import com.example.FlashDelivery.Dto.CommandeDto;
+import com.example.FlashDelivery.Dto.Returntype;
 import com.example.FlashDelivery.Mapper.CommandeMapper;
 import com.example.FlashDelivery.Model.Commande;
 import com.example.FlashDelivery.Model.CommandeProduit;
@@ -29,13 +30,25 @@ public class CommandeService {
         var client = clientRepo.findById(commandeDto.getIdClient()).orElse(null);
         var livreur = livreurRepo.findByEmail((commandeDto.getIdLivreur()));
 
-        var res = commandeRepo.save(new Commande(null , client,livreur , commandeDto.getAdresse() , Status.valueOf(commandeDto.getStatus())));
+        var commande = new Commande(null, client, livreur, commandeDto.getAdresse());
+        commande.setPrix(0.0);
 
-        for (Long id : commandeDto.getProductsList()){
-            commanderProduit(res.getId(), id);
+        var res = commandeRepo.save(commande);
+
+        double total = 0.0;
+        for (Long id : commandeDto.getProductsList()) {
+            Produit produit = productRepo.findById(id).orElse(null);
+            if (produit != null) {
+                commanderProduit(res.getId(), id);
+                total += produit.getPrix();
+            }
         }
 
+        res.setPrix(total);
+        commandeRepo.save(res);
+
         return commandeMapper.ToCommandeDTO(res);
+
 
     }
 
@@ -92,6 +105,28 @@ public class CommandeService {
         String email = userDetails.getUsername();
         return commandeRepo.countCommandeByLivreurEmail(email);
 
+    }
+
+    public CommandeDto updateStatut(Long id , Status newStatut){
+        Commande c = commandeRepo.findById(id).get();
+        c.setStatus(newStatut);
+        return commandeMapper.ToCommandeDTO(commandeRepo.save(c));
+    }
+
+    public Integer nbrCommandeEnAttente(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails.getUsername();
+        return commandeRepo.countCommandeByStatus_EnAttente(email);
+    }
+
+    public Integer nbrCommandeLivree(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = userDetails.getUsername();
+        return commandeRepo.countCommandeByStatus_Livre(email);
+    }
+
+    public List<Returntype> nbrByCmd(){
+        return commandeRepo.nbrProduitByidCommande();
     }
 
 

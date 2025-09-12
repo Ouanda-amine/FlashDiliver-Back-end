@@ -1,8 +1,11 @@
 package com.example.FlashDelivery.Controller;
 
 import com.example.FlashDelivery.Dto.CommandeDto;
+import com.example.FlashDelivery.Dto.Returntype;
+import com.example.FlashDelivery.Model.Status;
 import com.example.FlashDelivery.Service.CommandeService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,7 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @CrossOrigin("*")
 public class CommandeController {
-    public CommandeService commandeService;
+
+    public final CommandeService commandeService;
 
 
    @PostMapping("/AddCommande")
@@ -47,6 +51,26 @@ public class CommandeController {
     @GetMapping("/nbrCommande")
     public Integer getNombreDeCommande(){
        return commandeService.nbrcommandedelivreur();
+    }
+
+    @PutMapping("/updateStatut/{id}")
+    public CommandeDto UpdateStatut(@PathVariable Long id, @RequestParam String newst) {
+        return commandeService.updateStatut(id, Status.valueOf(newst));
+    }
+
+    @GetMapping("/nbrcmdenatt")
+    public Integer getNombredeCommandeEnAttente(){
+       return commandeService.nbrCommandeEnAttente();
+    }
+
+    @GetMapping("/nbrcmdliv")
+    public Integer getNombredeCommandeliv(){
+        return commandeService.nbrCommandeLivree();
+    }
+
+    @GetMapping("/nombreproductByCommande")
+    public List<Returntype> nbrPro(){
+       return commandeService.nbrByCmd();
     }
 
 

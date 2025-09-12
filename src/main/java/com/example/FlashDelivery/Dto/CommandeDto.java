@@ -17,6 +17,7 @@ public class CommandeDto {
     private List<Long> productsList;
     private String adresse;
     private String status;
+    private double prix ;
 
 
 
