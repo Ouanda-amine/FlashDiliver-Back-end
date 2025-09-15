@@ -23,7 +23,7 @@ public class Commande {
     @ManyToOne
     private Livreur livreur;
 
-    @OneToMany
+    @OneToMany(mappedBy = "commande" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<CommandeProduit> listcommandeProduit;
 
     private String adresse ;

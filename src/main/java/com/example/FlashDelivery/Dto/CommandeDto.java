@@ -20,5 +20,7 @@ public class CommandeDto {
     private double prix ;
 
 
+    public CommandeDto() {
 
+    }
 }
